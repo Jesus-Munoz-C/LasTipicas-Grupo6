@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             LasTipicasGrupo6Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Grupo 6",
+                        name = "Alex Ruiz y Jesus Muñoz",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
