@@ -7,10 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme // Corregido: Usar el nombre de tu tema real
+import com.example.lastipicas_grupo6.ui.screens.HomeScreen // IMPORTANTE: Importa la HomeScreen
 import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +20,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LasTipicasGrupo6Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Alex Ruiz y Jesus Muñoz",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                HomeScreen()
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun AppPreview() {
     LasTipicasGrupo6Theme {
-        Greeting("Android")
+        HomeScreen()
     }
 }
