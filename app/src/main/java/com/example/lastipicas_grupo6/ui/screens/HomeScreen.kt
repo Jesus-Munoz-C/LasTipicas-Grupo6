@@ -1,4 +1,4 @@
-package com.example.lastipicas_grupo6.ui.screens // Asegúrate de que el paquete sea correcto
+package com.example.lastipicas_grupo6.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -10,42 +10,35 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.lastipicas_grupo6.R // Importa R para acceder a tus recursos (ej. R.drawable.logo)
-import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme // Cambia al nombre correcto de tu tema
+import com.example.lastipicas_grupo6.R
+import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme
 
-/**
- * Función Composable principal: Define la estructura de la pantalla de inicio
- * con TopAppBar, texto, botón, y un logo.
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
-    // Scaffold proporciona la estructura básica (Barra superior y cuerpo)
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Lastipicas Grupo 6") } // Título adaptado a tu proyecto
+                title = { Text("Lastipicas Grupo 6") }
             )
         }
-    ) { innerPadding -> // innerPadding asegura que el contenido no se solape con el TopAppBar
-
-        // Columna para organizar los elementos verticalmente
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding) // Aplica el relleno del TopAppBar
+                .padding(innerPadding)
                 .fillMaxSize()
-                .padding(16.dp), // Relleno adicional para el contenido
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.CenterVertically) // Espacio entre elementos y centrado vertical
+            verticalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.CenterVertically)
         ) {
-            // 1. Texto de bienvenida
+            //Saludo
             Text(
                 text = "¡Bienvenido!",
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.primary
             )
-
-            // 2. Botón de ejemplo
+            //Boton
             Button(onClick = {  }) {
                 Text("Presióname")
             }
@@ -53,7 +46,7 @@ fun HomeScreen() {
             // 3. Imagen (Logo)
             //(PARA REEMPLAZAR EL LOGO DEBE ESTAR EL ARCHIVO CON EL NOMBRE "LOGO" en el RES/DRAWABLE.)
             Image(
-                painter = painterResource(id = R.drawable.logo), // Usando R.drawable.logo
+                painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Logo App",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -64,11 +57,6 @@ fun HomeScreen() {
     }
 }
 
-// ---
-
-/**
- * Función Composable para la vista previa en el IDE.
- */
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {

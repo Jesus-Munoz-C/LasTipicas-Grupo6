@@ -10,8 +10,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme // Corregido: Usar el nombre de tu tema real
-import com.example.lastipicas_grupo6.ui.screens.HomeScreen // IMPORTANTE: Importa la HomeScreen
+import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme
+import com.example.lastipicas_grupo6.ui.screens.HomeScreen
 import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme
 
 class MainActivity : ComponentActivity() {
