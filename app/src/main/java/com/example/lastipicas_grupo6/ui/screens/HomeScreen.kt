@@ -38,9 +38,15 @@ fun HomeScreen() {
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.primary
             )
+
+            Text(
+                text = "Inicia sesion para agendar un pedido",
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
             //Boton
             Button(onClick = {  }) {
-                Text("Presióname")
+                Text("Iniciar Sesión")
             }
 
             // 3. Imagen (Logo)
