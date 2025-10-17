@@ -18,11 +18,6 @@ import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme
 @Composable
 fun HomeScreen() {
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Lastipicas Grupo 6") }
-            )
-        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -30,13 +25,18 @@ fun HomeScreen() {
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.CenterVertically)
+            verticalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.Top)
         ) {
             //Saludo
             Text(
                 text = "¡Bienvenido!",
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(60.dp)
+
+
             )
 
             Text(
