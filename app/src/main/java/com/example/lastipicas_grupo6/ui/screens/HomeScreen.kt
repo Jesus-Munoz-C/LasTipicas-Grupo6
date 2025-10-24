@@ -12,11 +12,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lastipicas_grupo6.R
 import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme
+import androidx.navigation.NavController
+import com.example.lastipicas_grupo6.navigation.AppScreen
+
+//Para ver el navigation en la preview
+import androidx.navigation.compose.rememberNavController
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     Scaffold(
     ) { innerPadding ->
         Column(
@@ -28,15 +33,24 @@ fun HomeScreen() {
             verticalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.Top)
         ) {
             //Saludo
+            //Imagen (Logo)
+            //(PARA REEMPLAZAR EL LOGO DEBE ESTAR EL ARCHIVO CON EL NOMBRE "LOGO" en el RES/DRAWABLE.)
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo App",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.None
+
+            )
             Text(
                 text = "¡Bienvenido!",
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .padding(innerPadding)
-                    .padding(60.dp)
-
-
+                    .padding(9.dp)
             )
 
             Text(
@@ -45,20 +59,12 @@ fun HomeScreen() {
                 color = MaterialTheme.colorScheme.primary
             )
             //Boton
-            Button(onClick = {  }) {
+            Button(onClick = {
+                navController.navigate(AppScreen.LoginScreen.route)
+            }) {
                 Text("Iniciar Sesión")
             }
 
-            // 3. Imagen (Logo)
-            //(PARA REEMPLAZAR EL LOGO DEBE ESTAR EL ARCHIVO CON EL NOMBRE "LOGO" en el RES/DRAWABLE.)
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Logo App",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp),
-                contentScale = ContentScale.Fit
-            )
         }
     }
 }
@@ -67,6 +73,6 @@ fun HomeScreen() {
 @Composable
 fun HomeScreenPreview() {
     LasTipicasGrupo6Theme {
-        HomeScreen()
+        HomeScreen(navController = rememberNavController())
     }
 }
