@@ -56,7 +56,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { viewModel.login() },
+            onClick = { viewModel.LoginScreen() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Entrar")
@@ -69,6 +69,11 @@ fun LoginScreen(
             Text("¿No tienes cuenta? Regístrate")
         }
     }
+}
+
+@Composable
+fun LoginScreen() {
+    TODO("Not yet implemented")
 }
 
 @Preview(showBackground = true)
