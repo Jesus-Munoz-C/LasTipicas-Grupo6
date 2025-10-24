@@ -24,14 +24,14 @@ class LoginVM : ViewModel() {
         _uiState.update { it.copy(pass = valor, errores = it.errores.copy(pass = null)) }
     }
 
-    //fun login() {
+    fun login() {
         // ALEX. Aquí debe ir la lógica de validación e inicio de sesión
        // println("LoginUiState: ${_uiState.value}")
-    //}
+    }
 
     fun validarUsuario() : Boolean {
         val estadoActual = _uiState.value
-        val errores = UsuarioErrores(
+        val errores = UsuarioErrores (
             email = if (!estadoActual.email.contains(other = "@")) "Correo invalido" else null,
             pass = if (estadoActual.pass.length < 6) "Debe tener al menos 6 caracteres" else null
         )

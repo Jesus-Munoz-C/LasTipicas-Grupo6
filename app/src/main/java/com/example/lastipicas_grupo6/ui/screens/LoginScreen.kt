@@ -40,24 +40,41 @@ fun LoginScreen(
 
         OutlinedTextField(
             value = uiState.email,
-            onValueChange = { viewModel.onEmailChange(it) },
+            onValueChange = viewModel::onEmailChange,
             label = { Text("Correo Electrónico") },
+            isError = uiState.errores.email != null,
+            supportingText = {
+                uiState.errores.email?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error )
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = uiState.pass,
-            onValueChange = { viewModel.onPassChange(it) },
+            onValueChange = viewModel::onPassChange,
             label = { Text("Contraseña") },
             modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            isError = uiState.errores.pass != null,
+            supportingText = {
+                uiState.errores.pass?.let{
+                    Text(it, color = MaterialTheme.colorScheme.error)
+                }
+            }
         )
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { viewModel.LoginScreen() },
+            onClick = {
+                if (viewModel.validarUsuario()) {
+                    navController.navigate("hola")
+                }
+            },
             modifier = Modifier.fillMaxWidth()
+
         ) {
             Text("Entrar")
         }
@@ -71,10 +88,7 @@ fun LoginScreen(
     }
 }
 
-@Composable
-fun LoginScreen() {
-    TODO("Not yet implemented")
-}
+
 
 @Preview(showBackground = true)
 @Composable
