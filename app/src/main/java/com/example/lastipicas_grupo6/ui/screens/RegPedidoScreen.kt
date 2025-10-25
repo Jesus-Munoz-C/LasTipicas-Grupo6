@@ -5,7 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
 @Composable
-fun RegPedidoScreen(navController: NavController) {
+fun RegPedidoScreen(
+    navController: NavController) {
 
     //Rellenar el REGISTRO DE PEDIDO
 
