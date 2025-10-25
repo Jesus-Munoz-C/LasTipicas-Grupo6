@@ -6,13 +6,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.lastipicas_grupo6.ui.screens.HomeScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.lastipicas_grupo6.model.UsuarioUiState
 import com.example.lastipicas_grupo6.ui.screens.LoginScreen
 import com.example.lastipicas_grupo6.ui.screens.RegPedidoScreen
 import com.example.lastipicas_grupo6.viewmodel.LoginVM
+import com.example.lastipicas_grupo6.viewmodel.RegistroVM
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+
+    //Se crea el ViewModel solo una vez
+    val registroVM : RegistroVM = viewModel()
 
     NavHost(
         navController = navController,
