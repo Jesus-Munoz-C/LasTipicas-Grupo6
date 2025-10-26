@@ -6,18 +6,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.lastipicas_grupo6.ui.screens.HomeScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.lastipicas_grupo6.model.UsuarioUiState
 import com.example.lastipicas_grupo6.ui.screens.LoginScreen
 import com.example.lastipicas_grupo6.ui.screens.RegistroUsuarioScreen
+import com.example.lastipicas_grupo6.ui.screens.ResumenScreen
 import com.example.lastipicas_grupo6.viewmodel.LoginVM
 import com.example.lastipicas_grupo6.viewmodel.RegistroVM
+import com.example.lastipicas_grupo6.ui.screens.PedidoScreen
+import com.example.lastipicas_grupo6.viewmodel.DataStoreVM
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
 
-    //Se crea el ViewModel solo una vez
+
     val registroVM : RegistroVM = viewModel()
+    val DataStoreVM: DataStoreVM = viewModel()
 
     NavHost(
         navController = navController,
@@ -38,20 +41,24 @@ fun AppNavigation() {
             )
         }
 
-        composable(route = AppScreen.RegistroUsuarioScreen.route) {
+        composable(route = AppScreen.RegistroScreen.route) {
+            RegistroUsuarioScreen(
+                navController = navController,
+                viewModel = registroVM
+            )
+        }
 
-            RegistroUsuarioScreen(navController = navController)
+        composable(route = AppScreen.ResumenScreen.route) {
+            ResumenScreen(
+                viewModel = registroVM
+            )
+        }
+
+        composable(route = AppScreen.PedidoScreen.route) {
+            PedidoScreen(
+                navController = navController,
+                DataStoreVM = DataStoreVM
+            )
         }
     }
-}
-
-
-@Composable
-fun LoginScreen(navController: androidx.navigation.NavController) {
-    androidx.compose.material3.Text("PANTALLA DE LOGIN")
-}
-
-@Composable
-fun RegistroUsuarioScreen(navController: androidx.navigation.NavController) {
-    androidx.compose.material3.Text("PANTALLA DE WEONES/REGISTRO JASJDJASJD")
 }

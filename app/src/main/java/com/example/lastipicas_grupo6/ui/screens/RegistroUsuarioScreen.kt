@@ -1,3 +1,5 @@
+package com.example.lastipicas_grupo6.ui.screens
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.lastipicas_grupo6.ui.screens.LoginScreen
 import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme
 import com.example.lastipicas_grupo6.viewmodel.RegistroVM
+import com.example.lastipicas_grupo6.navigation.AppScreen
 
 @Composable
 fun RegistroUsuarioScreen(
@@ -122,7 +125,7 @@ fun RegistroUsuarioScreen(
         Button(
             onClick = {
                 if (viewModel.validarUsuario()) {
-                    navController.navigate("Registro")
+                    navController.navigate(AppScreen.ResumenScreen.route)
                 }
             },
             modifier = Modifier.fillMaxWidth()

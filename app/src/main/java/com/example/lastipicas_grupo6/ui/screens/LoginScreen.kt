@@ -42,9 +42,9 @@ fun LoginScreen(
             value = uiState.email,
             onValueChange = viewModel::onEmailChange,
             label = { Text("Correo Electrónico") },
-            isError = uiState.errores.email != null,
+            isError = uiState.erroresusuario.email != null,
             supportingText = {
-                uiState.errores.email?.let {
+                uiState.erroresusuario.email?.let {
                     Text(it, color = MaterialTheme.colorScheme.error )
                 }
             },
@@ -58,10 +58,10 @@ fun LoginScreen(
             label = { Text("Contraseña") },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
-            isError = uiState.errores.pass != null,
+            isError = uiState.erroresusuario.pass != null,
             supportingText = {
-                uiState.errores.pass?.let{
-                    Text(it, color = MaterialTheme.colorScheme.error)
+                uiState.erroresusuario.pass?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error )
                 }
             }
         )
@@ -70,7 +70,7 @@ fun LoginScreen(
         Button(
             onClick = {
                 if (viewModel.validarUsuario()) {
-                    navController.navigate("hola")
+                    navController.navigate(AppScreen.PedidoScreen.route)
                 }
             },
             modifier = Modifier.fillMaxWidth()
