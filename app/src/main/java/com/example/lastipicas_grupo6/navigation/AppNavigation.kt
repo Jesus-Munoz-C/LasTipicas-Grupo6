@@ -8,7 +8,7 @@ import com.example.lastipicas_grupo6.ui.screens.HomeScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lastipicas_grupo6.model.UsuarioUiState
 import com.example.lastipicas_grupo6.ui.screens.LoginScreen
-import com.example.lastipicas_grupo6.ui.screens.RegPedidoScreen
+import com.example.lastipicas_grupo6.ui.screens.RegistroUsuarioScreen
 import com.example.lastipicas_grupo6.viewmodel.LoginVM
 import com.example.lastipicas_grupo6.viewmodel.RegistroVM
 
@@ -38,9 +38,9 @@ fun AppNavigation() {
             )
         }
 
-        composable(route = AppScreen.RegistroScreen.route) {
+        composable(route = AppScreen.RegistroUsuarioScreen.route) {
 
-            RegistroScreen(navController = navController)
+            RegistroUsuarioScreen(navController = navController)
         }
     }
 }
@@ -52,6 +52,6 @@ fun LoginScreen(navController: androidx.navigation.NavController) {
 }
 
 @Composable
-fun RegistroScreen(navController: androidx.navigation.NavController) {
+fun RegistroUsuarioScreen(navController: androidx.navigation.NavController) {
     androidx.compose.material3.Text("PANTALLA DE WEONES/REGISTRO JASJDJASJD")
 }
