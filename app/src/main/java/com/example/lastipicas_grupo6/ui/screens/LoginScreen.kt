@@ -70,7 +70,7 @@ fun LoginScreen(
         Button(
             onClick = {
                 if (viewModel.validarUsuario()) {
-                    navController.navigate(AppScreen.PedidoScreen.route)
+                    navController.navigate(AppScreen.MenuScreen.route)
                 }
             },
             modifier = Modifier.fillMaxWidth()

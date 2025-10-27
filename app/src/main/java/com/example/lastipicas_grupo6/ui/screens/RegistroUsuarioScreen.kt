@@ -125,9 +125,10 @@ fun RegistroUsuarioScreen(
         Button(
             onClick = {
                 if (viewModel.validarUsuario()) {
-                    navController.navigate(AppScreen.ResumenScreen.route)
+                    navController.navigate(AppScreen.LoginScreen.route)
                 }
             },
+            enabled = uiState.aceptaTerminos,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Registrar")

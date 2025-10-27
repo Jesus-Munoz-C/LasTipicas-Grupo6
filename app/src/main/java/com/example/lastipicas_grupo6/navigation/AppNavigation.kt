@@ -1,18 +1,16 @@
 package com.example.lastipicas_grupo6.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.lastipicas_grupo6.ui.screens.HomeScreen
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.lastipicas_grupo6.ui.screens.LoginScreen
-import com.example.lastipicas_grupo6.ui.screens.RegistroUsuarioScreen
-import com.example.lastipicas_grupo6.ui.screens.ResumenScreen
-import com.example.lastipicas_grupo6.viewmodel.LoginVM
-import com.example.lastipicas_grupo6.viewmodel.RegistroVM
-import com.example.lastipicas_grupo6.ui.screens.PedidoScreen
+import com.example.lastipicas_grupo6.ui.screens.*
 import com.example.lastipicas_grupo6.viewmodel.DataStoreVM
+import com.example.lastipicas_grupo6.viewmodel.LoginVM
+import com.example.lastipicas_grupo6.viewmodel.PedidoVM
+import com.example.lastipicas_grupo6.viewmodel.RegistroVM
 
 @Composable
 fun AppNavigation() {
@@ -21,16 +19,28 @@ fun AppNavigation() {
 
     val registroVM : RegistroVM = viewModel()
     val DataStoreVM: DataStoreVM = viewModel()
+    val pedidoVM: PedidoVM = viewModel()
+
+    val sesionActiva = DataStoreVM.sesionActiva.collectAsState().value
+
+    if (sesionActiva == null) {
+
+    } else {
+        val startDestination = if (sesionActiva == true) {
+            AppScreen.MenuScreen.route
+        } else {
+            AppScreen.HomeScreen.route
+        }
 
     NavHost(
         navController = navController,
         startDestination = AppScreen.HomeScreen.route
-    ) {
+    ){
+
 
         composable(route = AppScreen.HomeScreen.route) {
             HomeScreen(navController = navController)
         }
-
 
         composable(route = AppScreen.LoginScreen.route) {
 
@@ -48,17 +58,35 @@ fun AppNavigation() {
             )
         }
 
+
+        composable(route = AppScreen.MenuScreen.route) {
+            MenuScreen(
+                navController = navController,
+                pedidoVM = pedidoVM,
+                mainVM = DataStoreVM
+            )
+        }
+
         composable(route = AppScreen.ResumenScreen.route) {
             ResumenScreen(
-                viewModel = registroVM
+                navController = navController,
+                pedidoVM = pedidoVM
             )
         }
 
         composable(route = AppScreen.PedidoScreen.route) {
             PedidoScreen(
                 navController = navController,
-                DataStoreVM = DataStoreVM
+                pedidoVM = pedidoVM
             )
         }
+
+        composable(route = AppScreen.ConfirmarPedidoScreen.route) {
+            ConfirmarPedidoScreen(
+                navController = navController,
+                pedidoVM = pedidoVM
+            )
+        }
+    }
     }
 }

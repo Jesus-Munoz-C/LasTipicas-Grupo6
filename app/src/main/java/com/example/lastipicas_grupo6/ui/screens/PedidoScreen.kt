@@ -1,46 +1,100 @@
-// Archivo: ui/screens/PedidoScreen.kt
 package com.example.lastipicas_grupo6.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.lastipicas_grupo6.model.Producto
 import com.example.lastipicas_grupo6.navigation.AppScreen
-import com.example.lastipicas_grupo6.viewmodel.DataStoreVM
+import com.example.lastipicas_grupo6.viewmodel.PedidoVM
+import com.example.lastipicas_grupo6.ui.screens.ItemResumen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PedidoScreen(
     navController: NavController,
-    DataStoreVM: DataStoreVM = viewModel()
+    pedidoVM: PedidoVM
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "PANTALLA DE PEDIDOS")
 
-        Button(onClick = {
-            DataStoreVM.cerrarSesion()
+    val uiState by pedidoVM.uiState.collectAsState()
 
-            navController.navigate(AppScreen.HomeScreen.route) {
-                popUpTo(navController.graph.startDestinationId) {
-                    inclusive = true
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("Mi Carrito de Compras") })
+        },
+        bottomBar = {
+
+            BottomAppBar(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Total: $${uiState.totalPedido}",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+
+                    Button(
+                        onClick = {
+                            navController.navigate(AppScreen.ResumenScreen.route)
+                        },
+
+                        enabled = uiState.productosEnCarrito.isNotEmpty()
+                    ) {
+                        Text("Ir a Resumen")
+                    }
                 }
-                launchSingleTop = true
             }
-        }) {
-            Text("Cerrar Sesión")
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
+        ) {
+
+
+            if (uiState.productosEnCarrito.isEmpty()) {
+
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Tu carrito está vacío.", style = MaterialTheme.typography.bodyLarge)
+                }
+            } else {
+
+                val itemsDelCarrito = uiState.productosEnCarrito.entries.toList()
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+
+
+                    items(itemsDelCarrito) { (producto, cantidad) ->
+                        ItemResumen(
+                            producto = producto,
+                            cantidad = cantidad
+                        )
+                    }
+                }
+            }
         }
     }
 }
+
+
