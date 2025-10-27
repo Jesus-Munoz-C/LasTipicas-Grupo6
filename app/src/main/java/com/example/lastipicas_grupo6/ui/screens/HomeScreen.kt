@@ -2,6 +2,7 @@ package com.example.lastipicas_grupo6.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -10,12 +11,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextAlign
 import com.example.lastipicas_grupo6.R
 import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme
 import androidx.navigation.NavController
 import com.example.lastipicas_grupo6.navigation.AppScreen
 
-//Para ver el navigation en la preview
 import androidx.navigation.compose.rememberNavController
 
 
@@ -30,8 +31,8 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.Top)
-        ) {
+            verticalArrangement = Arrangement.Center)
+         {
             //Saludo
             //Imagen (Logo)
             //(PARA REEMPLAZAR EL LOGO DEBE ESTAR EL ARCHIVO CON EL NOMBRE "LOGO" en el RES/DRAWABLE.)
@@ -40,30 +41,39 @@ fun HomeScreen(navController: NavController) {
                 contentDescription = "Logo App",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp),
+                    .height(250.dp),
                 contentScale = ContentScale.None
 
             )
             Text(
-                text = "¡Bienvenido!",
+                text = "Bienvenido a Las Típicas",
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .padding(9.dp)
+                textAlign = TextAlign.Center
             )
 
-            Text(
-                text = "Inicia sesion para agendar un pedido",
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
+             Spacer(modifier = Modifier.height(8.dp))
+
+             Text(
+                 text = "Las mejores empanadas, a un toque de distancia.",
+                 style = MaterialTheme.typography.titleMedium,
+                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                 textAlign = TextAlign.Center
+             )
+
+             Spacer(modifier = Modifier.height(32.dp))
+
             //Boton
-            Button(onClick = {
-                navController.navigate(AppScreen.LoginScreen.route)
-            }) {
-                Text("Iniciar Sesión")
-            }
+             Button(
+                 onClick = {
+                     navController.navigate(AppScreen.LoginScreen.route)
+                 },
+                 modifier = Modifier
+                     .fillMaxWidth()
+                     .padding(horizontal = 16.dp)
+             ) {
+                 Text("Iniciar Sesión")
+             }
 
         }
     }

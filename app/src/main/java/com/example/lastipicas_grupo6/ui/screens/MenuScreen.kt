@@ -15,6 +15,11 @@ import com.example.lastipicas_grupo6.model.Producto
 import com.example.lastipicas_grupo6.navigation.AppScreen
 import com.example.lastipicas_grupo6.viewmodel.DataStoreVM
 import com.example.lastipicas_grupo6.viewmodel.PedidoVM
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -115,10 +120,24 @@ fun ProductoItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
+            Image(
+                painter = painterResource(id = producto.imagen),
+                contentDescription = producto.nombre,
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(producto.nombre, style = MaterialTheme.typography.titleMedium)
                 Text("$${producto.precio}", style = MaterialTheme.typography.bodyMedium)
             }
+
             Button(onClick = onAgregar) {
                 Text("Agregar")
             }

@@ -16,6 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.lastipicas_grupo6.navigation.AppScreen
 import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme
 import com.example.lastipicas_grupo6.viewmodel.LoginVM
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -23,6 +25,7 @@ fun LoginScreen(
     viewModel: LoginVM = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -69,8 +72,10 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                if (viewModel.validarUsuario()) {
-                    navController.navigate(AppScreen.MenuScreen.route)
+                scope.launch {
+                    if (viewModel.validarUsuario()) {
+                        navController.navigate(AppScreen.MenuScreen.route)
+                    }
                 }
             },
             modifier = Modifier.fillMaxWidth()

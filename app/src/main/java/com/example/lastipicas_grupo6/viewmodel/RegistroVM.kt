@@ -7,12 +7,26 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import com.example.lastipicas_grupo6.data.UsuarioDataStore
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
-class RegistroVM : ViewModel() {
+//Mensaje POP Me dio flojera hacer la pantalla
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+
+
+class RegistroVM(application: Application) : AndroidViewModel(application) {
+    private val dataStore = UsuarioDataStore(getApplication())
 
     private val _uiState = MutableStateFlow(UsuarioUiState())
     val uiState: StateFlow<UsuarioUiState> = _uiState.asStateFlow()
+
 
     fun onNombreChange(valor: String){
         _uiState.update{ it.copy(nombre = valor, errores = it.errores.copy(nombre = null)) }
@@ -41,10 +55,10 @@ class RegistroVM : ViewModel() {
         val estadoActual = _uiState.value
         val errores = RegistroUsuarioErrores (
             nombre = if (estadoActual.nombre.isBlank())"Campo obligatorio" else null,
-            email = if (!estadoActual.email.contains(other = "@")) "Correo invalido" else null,
-            pass = if (estadoActual.pass.length < 6) "Debe tener al menos 6 caracteres" else null,
-            direccion = if (estadoActual.direccion.isBlank()) "Campo obligatorio" else null,
-            telefono = if (estadoActual.telefono.length != 8) "Debe tener 8 numeros" else null
+            email = if (!estadoActual.email.contains(other = "@gmail.com")) "El correo debe ser @gmail.com! " else null,
+            pass = if (estadoActual.pass.length < 8) "Debe tener al menos 8 caracteres! " else null,
+            direccion = if (estadoActual.direccion.isBlank()) "Ingrese una Direccion!"  else null,
+            telefono = if (estadoActual.telefono.length != 9) "Debe tener 9 numeros! " else null
         )
 
         val hayErrores = listOfNotNull(
@@ -54,7 +68,18 @@ class RegistroVM : ViewModel() {
             errores.direccion,
             errores.telefono
         ).isNotEmpty()
+
         _uiState.update{it.copy(errores = errores)}
-        return !hayErrores
+
+        if (!hayErrores && estadoActual.aceptaTerminos) {
+            viewModelScope.launch {
+                dataStore.guardarCredenciales(
+                    email = estadoActual.email,
+                    pass = estadoActual.pass
+                )
+            }
+        }
+
+        return !hayErrores && estadoActual.aceptaTerminos
     }
 }

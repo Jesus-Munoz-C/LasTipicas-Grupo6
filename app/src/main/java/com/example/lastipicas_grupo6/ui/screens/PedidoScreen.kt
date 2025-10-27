@@ -15,6 +15,7 @@ import com.example.lastipicas_grupo6.model.Producto
 import com.example.lastipicas_grupo6.navigation.AppScreen
 import com.example.lastipicas_grupo6.viewmodel.PedidoVM
 import com.example.lastipicas_grupo6.ui.screens.ItemResumen
+import com.example.lastipicas_grupo6.ui.screens.ItemCarrito
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,9 +87,11 @@ fun PedidoScreen(
 
 
                     items(itemsDelCarrito) { (producto, cantidad) ->
-                        ItemResumen(
+                        ItemCarrito (
                             producto = producto,
-                            cantidad = cantidad
+                            cantidad = cantidad,
+                            onAgregar = { pedidoVM.agregarAlCarrito(producto) },
+                            onQuitar = { pedidoVM.quitarDelCarrito(producto) }
                         )
                     }
                 }

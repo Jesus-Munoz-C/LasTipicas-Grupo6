@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
+import kotlin.Pair
 
 class LoginVM(application: Application) : AndroidViewModel(application) {
 
@@ -27,12 +29,23 @@ class LoginVM(application: Application) : AndroidViewModel(application) {
         _uiState.update { it.copy(pass = valor, erroresusuario = it.erroresusuario.copy(pass = null)) }
     }
 
-    fun validarUsuario(): Boolean {
+    suspend fun validarUsuario(): Boolean {
         val estadoActual = _uiState.value
+
+
+        val credencialesGuardadas = dataStore.obtenerCredenciales().first()
+
+        val emailGuardado = credencialesGuardadas.first
+        val passGuardada = credencialesGuardadas.second
+
         val errores = UsuarioErrores(
-            email = if (!estadoActual.email.lowercase().contains("@gmail.com")) "Correo inválido" else null,
-            pass = if (estadoActual.pass.length < 6) "Debe tener al menos 6 caracteres" else null
-        )
+            email = if (estadoActual.email != emailGuardado)
+                "Email no registrado"
+            else null,
+
+            pass = if (estadoActual.pass != passGuardada)
+                "Contraseña incorrecta"
+            else null)
 
         val hayErrores = listOfNotNull(
             errores.email,
@@ -42,11 +55,10 @@ class LoginVM(application: Application) : AndroidViewModel(application) {
         _uiState.update { it.copy(erroresusuario = errores) }
 
         if (!hayErrores) {
-            viewModelScope.launch { // (como en Guía 12)
+            viewModelScope.launch {
                 dataStore.guardarEstadoSesion(true)
             }
         }
-
         return !hayErrores
     }
 }
