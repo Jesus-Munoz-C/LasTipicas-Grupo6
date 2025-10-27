@@ -13,13 +13,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-//Mensaje POP Me dio flojera hacer la pantalla
-
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
-
 
 class RegistroVM(application: Application) : AndroidViewModel(application) {
     private val dataStore = UsuarioDataStore(getApplication())
