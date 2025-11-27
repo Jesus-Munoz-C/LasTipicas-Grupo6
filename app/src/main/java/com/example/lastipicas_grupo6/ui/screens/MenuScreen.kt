@@ -15,11 +15,11 @@ import com.example.lastipicas_grupo6.model.Producto
 import com.example.lastipicas_grupo6.navigation.AppScreen
 import com.example.lastipicas_grupo6.viewmodel.DataStoreVM
 import com.example.lastipicas_grupo6.viewmodel.PedidoVM
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import coil.compose.AsyncImage
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +32,7 @@ fun MenuScreen(
     val uiState by pedidoVM.uiState.collectAsState()
 
 
-    val listaProductos = pedidoVM.listaProductos
+    val listaProductos by pedidoVM.listaProductos.collectAsState()
 
     Scaffold(
         topBar = {
@@ -120,8 +120,8 @@ fun ProductoItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = producto.imagen),
+            AsyncImage(
+                model = producto.imagen,
                 contentDescription = producto.nombre,
                 modifier = Modifier
                     .size(60.dp)

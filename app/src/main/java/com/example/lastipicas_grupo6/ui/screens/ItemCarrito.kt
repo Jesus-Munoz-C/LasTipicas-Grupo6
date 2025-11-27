@@ -15,6 +15,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.shape.RoundedCornerShape
+import coil.compose.AsyncImage
+
 
 @Composable
 fun ItemCarrito(
@@ -32,8 +34,8 @@ fun ItemCarrito(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = producto.imagen),
+            AsyncImage(
+                model = producto.imagen,
                 contentDescription = producto.nombre,
                 modifier = Modifier
                     .size(60.dp)

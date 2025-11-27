@@ -1,10 +1,13 @@
 package com.example.lastipicas_grupo6.model
 
-import androidx.annotation.DrawableRes
+import com.google.gson.annotations.SerializedName
 
 data class Producto(
-    val id: String,
-    val nombre: String,
-    val precio: Int,
-    @DrawableRes val imagen: Int
+
+    @SerializedName("id") val id: String,
+    @SerializedName("nombre") val nombre: String,
+    @SerializedName("precio") val precio: Int,
+
+
+    @SerializedName("imagen") val imagen: String
 )

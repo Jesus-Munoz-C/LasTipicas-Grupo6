@@ -8,7 +8,6 @@ data class UsuarioUiState(
     val telefono: String = "",
     val aceptaTerminos: Boolean = false,
     val errores: RegistroUsuarioErrores = RegistroUsuarioErrores()
-    //Faltan agregar Errores por ejemplo: "El correo debe tener @."
 )
 data class RegistroUsuarioErrores(
     val nombre: String? = null,
