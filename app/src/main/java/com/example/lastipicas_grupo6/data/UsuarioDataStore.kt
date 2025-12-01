@@ -11,8 +11,10 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 
 val Context.dataStore by preferencesDataStore(name = "preferencias_usuario")
 
+
 class UsuarioDataStore(private val context: Context) {
 
+    private val USUARIO_NOMBRE = stringPreferencesKey("usuario_nombre")
     private val SESION_ACTIVA = booleanPreferencesKey("sesion_activa")
     private val USUARIO_EMAIL = stringPreferencesKey("usuario_email")
     private val USUARIO_PASS = stringPreferencesKey("usuario_pass")
@@ -20,6 +22,12 @@ class UsuarioDataStore(private val context: Context) {
     private val USER_PHOTO_URI = stringPreferencesKey("user_photo_uri")
     private val USER_TOKEN = stringPreferencesKey("user_token")
 
+
+    suspend fun guardarNombre(nombre: String) {
+        context.dataStore.edit { preferences -> preferences[USUARIO_NOMBRE] = nombre }
+    }
+
+    val obtenerNombre: Flow<String?> = context.dataStore.data.map { it[USUARIO_NOMBRE] }
 
     suspend fun guardarEstadoSesion(valor: Boolean) {
         context.dataStore.edit { preferencias ->

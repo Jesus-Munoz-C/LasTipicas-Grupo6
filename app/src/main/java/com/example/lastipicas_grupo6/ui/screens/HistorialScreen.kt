@@ -1,6 +1,5 @@
 package com.example.lastipicas_grupo6.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,12 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.lastipicas_grupo6.navigation.AppScreen
 import com.example.lastipicas_grupo6.viewmodel.PedidoVM
 import com.example.lastipicas_grupo6.model.PedidoResponse
 import com.example.lastipicas_grupo6.model.ItemHistorial
+import androidx.compose.runtime.collectAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,6 +23,7 @@ fun HistorialScreen(
     navController: NavController,
     pedidoVM: PedidoVM
 ) {
+
     LaunchedEffect(Unit) {
         pedidoVM.cargarHistorial()
     }
@@ -44,7 +44,6 @@ fun HistorialScreen(
                 }
             } else {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    // Recorremos cada PEDIDO (Boleta)
                     items(historial) { pedido ->
                         CardPedido(pedido)
                     }
@@ -63,17 +62,15 @@ fun CardPedido(pedido: PedidoResponse) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
-            // --- ENCABEZADO DEL PEDIDO ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Pedido #${pedido.id.takeLast(6).uppercase()}", // Mostramos solo los últimos 6 caracteres del ID
+                    text = "Pedido #${pedido.id.takeLast(6).uppercase()}",
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
-                // Formateamos la fecha simple (cortamos la hora larga)
                 Text(
                     text = pedido.fecha.take(10),
                     style = MaterialTheme.typography.bodySmall,
@@ -83,7 +80,6 @@ fun CardPedido(pedido: PedidoResponse) {
 
             Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-            // --- LISTA DE PRODUCTOS DENTRO DEL PEDIDO ---
             pedido.productos.forEach { item ->
                 FilaProductoHistorial(item)
             }

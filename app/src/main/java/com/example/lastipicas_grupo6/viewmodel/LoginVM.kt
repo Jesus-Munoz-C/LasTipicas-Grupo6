@@ -45,13 +45,16 @@ class LoginVM(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             try {
-                val respuesta = repository.loginUsuario(email, pass) // Ahora sí existe esta función
+                val respuesta = repository.loginUsuario(email, pass)
 
                 if (respuesta.isSuccessful && respuesta.body() != null) {
                     val loginResponse = respuesta.body()!!
 
                     dataStore.guardarToken(loginResponse.token)
                     dataStore.guardarCredenciales(email, pass)
+                    loginResponse.usuario?.let { user ->
+                        dataStore.guardarNombre(user.nombre)
+                    }
                     dataStore.guardarEstadoSesion(true)
 
                     onSuccess()

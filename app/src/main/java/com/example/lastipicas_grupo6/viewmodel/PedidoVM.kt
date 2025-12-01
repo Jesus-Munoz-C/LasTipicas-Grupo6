@@ -8,7 +8,6 @@ import com.example.lastipicas_grupo6.model.PedidoRequest
 import com.example.lastipicas_grupo6.model.PedidoResponse
 import com.example.lastipicas_grupo6.model.PedidoUiState
 import com.example.lastipicas_grupo6.model.Producto
-// IMPORTANTE: Agregamos este import que faltaba para crear la lista de productos
 import com.example.lastipicas_grupo6.model.ProductoPedido
 import com.example.lastipicas_grupo6.repository.ProductoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,19 +39,16 @@ class PedidoVM(application: Application) : AndroidViewModel(application) {
         _listaProductos.value = repositorio.obtenerProductosLocales()
     }
 
-    // --- FUNCIÓN PRINCIPAL DE COMPRA (Agrupada) ---
     fun confirmarCompra(onSuccess: () -> Unit) {
         viewModelScope.launch {
             val token = dataStore.obtenerToken.first()
             val credenciales = dataStore.obtenerCredenciales().first()
 
             val emailUsuario = credenciales.first ?: "anonimo@lastipicas.cl"
-            // Podrías guardar el teléfono en DataStore también, por ahora usamos uno fijo o lo sacamos del perfil
             val telefonoUsuario = 912345678L
 
             if (!token.isNullOrBlank() && _uiState.value.productosEnCarrito.isNotEmpty()) {
 
-                // 1. Transformamos el carrito en la lista de items (ProductoPedido)
                 val listaParaEnviar = _uiState.value.productosEnCarrito.map { (producto, cantidad) ->
                     val (masa, coccion) = calcularDetalles(producto.nombre)
 
@@ -65,39 +61,27 @@ class PedidoVM(application: Application) : AndroidViewModel(application) {
                     )
                 }
 
-                // 2. Armamos el "Paquete Completo" (PedidoRequest)
                 val pedidoCompleto = PedidoRequest(
                     usuario = emailUsuario,
                     telefono = telefonoUsuario,
-                    total = _uiState.value.totalPedido, // Enviamos el total calculado
+                    total = _uiState.value.totalPedido,
                     productos = listaParaEnviar
                 )
-
-                // 3. Enviamos UNA sola vez el objeto completo
-                println("PEDIDO_DEBUG: Enviando pedido completo -> $pedidoCompleto")
 
                 try {
                     val respuesta = repositorio.enviarPedido(token, pedidoCompleto)
 
                     if (respuesta.isSuccessful) {
-                        println("PEDIDO_EXITO: Pedido agrupado guardado!")
-                        reiniciarPedido() // Limpiamos el carrito local
-                        onSuccess() // Navegamos
-                    } else {
-                        val errorMsg = respuesta.errorBody()?.string()
-                        println("PEDIDO_ERROR: ${respuesta.code()} - $errorMsg")
+                        reiniciarPedido()
+                        onSuccess()
                     }
                 } catch (e: Exception) {
-                    println("PEDIDO_CRASH: ${e.message}")
                     e.printStackTrace()
                 }
-            } else {
-                println("PEDIDO_ERROR: Token vacío o carrito vacío")
             }
         }
     }
 
-    // Función auxiliar para calcular datos requeridos por la API
     private fun calcularDetalles(nombre: String): Pair<String, String> {
         return when {
             nombre.contains("Pino", ignoreCase = true) -> Pair("Tradicional", "Horno")
@@ -135,21 +119,26 @@ class PedidoVM(application: Application) : AndroidViewModel(application) {
         _uiState.update { PedidoUiState() }
     }
 
-    // --- CARGA DE HISTORIAL ---
     fun cargarHistorial() {
         viewModelScope.launch {
             val token = dataStore.obtenerToken.first()
             val credenciales = dataStore.obtenerCredenciales().first()
-            val emailActual = credenciales.first
 
-            if (!token.isNullOrBlank() && emailActual != null) {
+            val emailActual = (credenciales.first)
+            val nombreActual = (dataStore.obtenerNombre.first())
+
+            if (!token.isNullOrBlank()) {
                 try {
                     val listaCompleta = repositorio.obtenerHistorialPedidos(token)
 
-                    // Filtramos para mostrar solo los pedidos de este usuario
                     _historial.value = listaCompleta.filter { pedido ->
-                        pedido.usuario == emailActual
+                        val usuarioDelPedido = pedido.usuario
+                        val esMiCorreo = usuarioDelPedido.equals(emailActual, ignoreCase = true)
+                        val esMiNombre = usuarioDelPedido.equals(nombreActual, ignoreCase = true)
+
+                        esMiCorreo || esMiNombre
                     }
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                     _historial.value = emptyList()
