@@ -12,13 +12,23 @@ La aplicación se conecta a un Backend propio desarrollado en **Node.js** y util
 ## Funcionalidades Implementadas
 
 * **Gestión de Usuarios y Seguridad**
-    Permite el registro de nuevos usuarios capturando datos personales y una fotografía de perfil utilizando la **cámara nativa** del dispositivo. Incluye un sistema de Login seguro con validación de credenciales y manejo de sesiones mediante **DataStore** y Tokens.
+    Permite el registro de nuevos usuarios capturando datos personales y una fotografía de perfil utilizando la **cámara nativa** del dispositivo. Incluye un sistema de Login seguro con validación de credenciales y manejo de sesiones mediante **DataStore** y Tokens JWT.
 
 * **Catálogo y Carrito de Compras**
     Muestra un listado de productos (Empanadas y Bebidas) con sus precios e imágenes. Los usuarios pueden agregar productos a un carrito de compras, donde se calcula automáticamente el total a pagar antes de confirmar el pedido.
 
 * **Historial de Pedidos en la Nube**
-    Integra una sección de historial donde cada usuario puede ver exclusivamente sus pedidos anteriores. Estos datos son persistentes y se obtienen en tiempo real desde una base de datos **MongoDB Atlas** a través de una API REST.
+    Integra una sección de historial donde cada usuario puede ver exclusivamente sus pedidos anteriores. Estos datos son persistentes y se obtienen en tiempo real desde una base de datos **MongoDB Atlas**.
+
+## Endpoints Utilizados
+La aplicación consume los siguientes servicios del Backend desarrollado en Node.js:
+
+| Método | Endpoint   | Descripción |
+| :--- | :--- | :--- |
+| **POST** | `/signUp` | Registro de nuevos usuarios. |
+| **POST** | `/login` | Autenticación de usuarios (Retorna Token). |
+| **POST** | `/pedido` | Guardar un nuevo pedido (Requiere Token). |
+| **GET** | `/pedido` | Obtener historial de pedidos del usuario (Requiere Token). |
 
 ## Pasos para Ejecutar el Proyecto
 
@@ -39,6 +49,16 @@ Asegúrate de que el servidor **Node.js** esté corriendo localmente o en la nub
 6.  Ir al apartado de **"Device manager"** y seleccionar un emulador (Recomendado API 34 o superior).
 7.  **Importante:** Asegúrate de que la IP en `RetrofitClient` corresponda a la de tu servidor (o `10.0.2.2` si es local).
 8.  Por último, ejecutar la app en `MainActivity` presionando el logo de "Play".
+
+## Evidencia de APK Firmado
+A continuación se adjunta evidencia de la generación del APK firmado (`release`) y el archivo de claves (`.jks`):
+
+![PASO 1](app/IMAGENES/PASO1.png)
+![PASO 2](app/IMAGENES/PASO2.png)
+![PASO 3](app/IMAGENES/PASO3.png)
+![PASO 4](app/IMAGENES/PASO4.png)
+![Evidencia 1](app/IMAGENES/ARCHIVO1.png)
+![Evidencia 2](app/IMAGENES/ARCHIVO2.png)
 
 ## Tecnologías Utilizadas
 * **Android Studio** (Kotlin + Jetpack Compose)
