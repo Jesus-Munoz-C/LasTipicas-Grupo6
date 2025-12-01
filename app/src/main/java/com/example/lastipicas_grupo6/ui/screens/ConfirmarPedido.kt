@@ -18,13 +18,11 @@ import com.example.lastipicas_grupo6.viewmodel.PedidoVM
 @Composable
 fun ConfirmarPedidoScreen(
     navController: NavController,
-    pedidoVM: PedidoVM) {
-
+    pedidoVM: PedidoVM
+) {
     val context = LocalContext.current
     val imageLoader = ImageLoader.Builder(context)
-        .components {
-            add(GifDecoder.Factory())
-        }
+        .components { add(GifDecoder.Factory()) }
         .build()
 
     Column(
@@ -36,8 +34,7 @@ fun ConfirmarPedidoScreen(
     ) {
 
         AsyncImage(
-
-            model = R.drawable.confirmarp,
+            model = R.drawable.confirmarp, // Asegúrate de tener este gif/imagen
             imageLoader = imageLoader,
             contentDescription = "Pedido Confirmado",
             modifier = Modifier.size(150.dp)
@@ -46,18 +43,28 @@ fun ConfirmarPedidoScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "¡Pedido confirmado con éxito!",
+            text = "¡Estás a un paso!",
             style = MaterialTheme.typography.headlineSmall
         )
+        Text("Confirma para enviar tu pedido a cocina.")
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Button(onClick = {pedidoVM.reiniciarPedido()
-            navController.navigate(AppScreen.MenuScreen.route) {
-                popUpTo(AppScreen.MenuScreen.route) { inclusive = true }
-            }
-        }) {
-            Text("Volver al Menú")
+        // --- AQUÍ ESTÁ EL CAMBIO ---
+        Button(
+            onClick = {
+                // LLAMAMOS A LA FUNCIÓN QUE TENÍAS "OLVIDADA"
+                pedidoVM.confirmarCompra {
+                    // Esto solo se ejecuta si el pedido se guardó bien en MongoDB
+                    navController.navigate(AppScreen.MenuScreen.route) {
+                        popUpTo(AppScreen.MenuScreen.route) { inclusive = true }
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Finalizar Compra y Guardar")
         }
+        // ---------------------------
     }
 }

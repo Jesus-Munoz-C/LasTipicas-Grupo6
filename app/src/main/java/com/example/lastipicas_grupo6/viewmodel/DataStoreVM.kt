@@ -8,7 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
 
 class DataStoreVM(application: Application) : AndroidViewModel(application) {
 
@@ -23,11 +25,18 @@ class DataStoreVM(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    val fotoUsuario = dataStore.obtenerFoto
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+
     fun cerrarSesion() {
         viewModelScope.launch {
-            dataStore.guardarEstadoSesion(false)
+            viewModelScope.launch {
 
-            _sesionActiva.value = false
+                dataStore.vaciarDataStore()
+
+                _sesionActiva.value = false
+            }
         }
     }
 }

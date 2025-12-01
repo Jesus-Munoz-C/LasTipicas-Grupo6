@@ -6,16 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.lastipicas_grupo6.data.UsuarioDataStore
 import com.example.lastipicas_grupo6.model.LoginUiState
 import com.example.lastipicas_grupo6.model.UsuarioErrores
+import com.example.lastipicas_grupo6.repository.AuthRepository // IMPORTANTE
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.first
-import kotlin.Pair
 
 class LoginVM(application: Application) : AndroidViewModel(application) {
 
+    private val repository = AuthRepository() // CAMBIO: Usamos el repo de Auth
     private val dataStore = UsuarioDataStore(getApplication())
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -29,36 +29,38 @@ class LoginVM(application: Application) : AndroidViewModel(application) {
         _uiState.update { it.copy(pass = valor, erroresusuario = it.erroresusuario.copy(pass = null)) }
     }
 
-    suspend fun validarUsuario(): Boolean {
-        val estadoActual = _uiState.value
+    fun login(onSuccess: () -> Unit) {
+        val email = _uiState.value.email
+        val pass = _uiState.value.pass
 
+        val errorEmail = if (email.isBlank()) "Ingrese su correo" else null
+        val errorPass = if (pass.isBlank()) "Ingrese su contraseña" else null
 
-        val credencialesGuardadas = dataStore.obtenerCredenciales().first()
+        if (errorEmail != null || errorPass != null) {
+            _uiState.update {
+                it.copy(erroresusuario = UsuarioErrores(email = errorEmail, pass = errorPass))
+            }
+            return
+        }
 
-        val emailGuardado = credencialesGuardadas.first
-        val passGuardada = credencialesGuardadas.second
+        viewModelScope.launch {
+            try {
+                val respuesta = repository.loginUsuario(email, pass) // Ahora sí existe esta función
 
-        val errores = UsuarioErrores(
-            email = if (estadoActual.email != emailGuardado)
-                "Email no registrado"
-            else null,
+                if (respuesta.isSuccessful && respuesta.body() != null) {
+                    val loginResponse = respuesta.body()!!
 
-            pass = if (estadoActual.pass != passGuardada)
-                "Contraseña incorrecta"
-            else null)
+                    dataStore.guardarToken(loginResponse.token)
+                    dataStore.guardarCredenciales(email, pass)
+                    dataStore.guardarEstadoSesion(true)
 
-        val hayErrores = listOfNotNull(
-            errores.email,
-            errores.pass
-        ).isNotEmpty()
-
-        _uiState.update { it.copy(erroresusuario = errores) }
-
-        if (!hayErrores) {
-            viewModelScope.launch {
-                dataStore.guardarEstadoSesion(true)
+                    onSuccess()
+                } else {
+                    _uiState.update { it.copy(erroresusuario = UsuarioErrores(pass = "Credenciales incorrectas")) }
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(erroresusuario = UsuarioErrores(pass = "Error: ${e.message}")) }
             }
         }
-        return !hayErrores
     }
 }

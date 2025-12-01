@@ -9,4 +9,5 @@ sealed class  AppScreen(val route: String) {
     data object PedidoScreen : AppScreen("pedido_screen")
     data object ConfirmarPedidoScreen : AppScreen("confirmar_pedido_screen")
 
+    data object HistorialScreen : AppScreen("historial_screen")
 }

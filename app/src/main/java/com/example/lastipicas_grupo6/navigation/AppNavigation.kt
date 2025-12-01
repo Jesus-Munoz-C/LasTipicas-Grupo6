@@ -87,6 +87,13 @@ fun AppNavigation() {
                 pedidoVM = pedidoVM
             )
         }
+
+        composable(route = AppScreen.HistorialScreen.route) {
+            HistorialScreen(
+                navController = navController,
+                pedidoVM = pedidoVM
+            )
+        }
     }
     }
 }

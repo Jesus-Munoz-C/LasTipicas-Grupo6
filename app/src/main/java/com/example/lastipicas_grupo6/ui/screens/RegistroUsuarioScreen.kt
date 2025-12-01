@@ -1,130 +1,196 @@
 package com.example.lastipicas_grupo6.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import android.content.Context
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.lastipicas_grupo6.ui.screens.LoginScreen
-import com.example.lastipicas_grupo6.ui.theme.LasTipicasGrupo6Theme
-import com.example.lastipicas_grupo6.viewmodel.RegistroVM
+import coil.compose.AsyncImage
 import com.example.lastipicas_grupo6.navigation.AppScreen
+import com.example.lastipicas_grupo6.viewmodel.RegistroVM
+import java.io.File
 
 @Composable
 fun RegistroUsuarioScreen(
     navController: NavController,
     viewModel: RegistroVM
-){
+) {
     val uiState by viewModel.uiState.collectAsState()
+
+
+    val fotoPerfil by viewModel.fotoPerfil.collectAsState()
+
+
+    val context = LocalContext.current
+
+
+    var tempPhotoUri by remember { mutableStateOf<Uri?>(null) }
+
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+
+        if (success && tempPhotoUri != null) {
+            viewModel.onFotoTomada(tempPhotoUri!!)
+        }
+    }
 
     Column(
         Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ){
-        //Nombre
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally // Centramos todo
+    ) {
+
+        Text("Crear Cuenta", style = MaterialTheme.typography.headlineMedium)
+
+
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(120.dp)
+                .clip(CircleShape)
+                .background(Color.LightGray)
+                .clickable {
+
+                    val photoFile = File.createTempFile(
+                        "IMG_",
+                        ".jpg",
+                        context.getExternalFilesDir("my_images")
+                    )
+                    tempPhotoUri = FileProvider.getUriForFile(
+                        context,
+                        "com.example.lastipicas_grupo6.fileprovider",
+                        photoFile
+                    )
+
+                    cameraLauncher.launch(tempPhotoUri!!)
+                }
+        ) {
+            if (fotoPerfil != null) {
+
+                AsyncImage(
+                    model = fotoPerfil,
+                    contentDescription = "Foto Perfil",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+
+                Icon(
+                    imageVector = Icons.Default.CameraAlt,
+                    contentDescription = "Tomar Foto",
+                    tint = Color.White,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
+        }
+        Text("Toca el círculo para tomar una foto", style = MaterialTheme.typography.bodySmall)
+
         OutlinedTextField(
             value = uiState.nombre,
             onValueChange = viewModel::onNombreChange,
             label = { Text("Nombre") },
             isError = uiState.errores.nombre != null,
             supportingText = {
-                uiState.errores.nombre?.let{
-                    Text(it, color = MaterialTheme.colorScheme.error )
-                }
+                uiState.errores.nombre?.let { Text(it) }
             },
             modifier = Modifier.fillMaxWidth()
         )
-        //Correo
+
         OutlinedTextField(
             value = uiState.email,
             onValueChange = viewModel::onEmailChange,
-            label = {Text("Correo Electronico")},
+            label = { Text("Correo Electrónico") },
             isError = uiState.errores.email != null,
             supportingText = {
-                uiState.errores.email?.let{
-                    Text(it, color = MaterialTheme.colorScheme.error )
-                }
+                uiState.errores.email?.let { Text(it) }
             },
             modifier = Modifier.fillMaxWidth()
         )
 
-        //clave
         OutlinedTextField(
             value = uiState.pass,
             onValueChange = viewModel::onPassChange,
-            label = {Text("Contraseña")},
+            label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation(),
             isError = uiState.errores.pass != null,
             supportingText = {
-                uiState.errores.pass?.let{
-                    Text(it, color = MaterialTheme.colorScheme.error)
-                }
+                uiState.errores.pass?.let { Text(it) }
             },
             modifier = Modifier.fillMaxWidth()
         )
 
-        //Direccion
         OutlinedTextField(
             value = uiState.direccion,
             onValueChange = viewModel::onDirecccionChange,
-            label = { Text("Direccion")},
+            label = { Text("Dirección") },
             isError = uiState.errores.direccion != null,
             supportingText = {
-                uiState.errores.direccion?.let{
-                Text(it, color = MaterialTheme.colorScheme.error)
-                }
+                uiState.errores.direccion?.let { Text(it) }
             },
             modifier = Modifier.fillMaxWidth()
         )
 
-        //Telefono
         OutlinedTextField(
             value = uiState.telefono,
             onValueChange = viewModel::onTelefonoChange,
-            label = {Text("Telefono")},
-            isError = uiState.errores.telefono != null,
-            supportingText = {
-                uiState.errores.telefono?.let{
-                    Text(it, color = MaterialTheme.colorScheme.error)
-                }
-            },
+            label = { Text("Teléfono") },
             modifier = Modifier.fillMaxWidth()
         )
 
-        //checkbox: AceptarTerminos
-        Row(verticalAlignment = Alignment.CenterVertically){
+        OutlinedTextField(
+            value = uiState.telefono,
+            onValueChange = { input ->
+                if (input.all { it.isDigit() } && input.length <= 9) {
+                    viewModel.onTelefonoChange(input)
+                }
+            },
+            label = { Text("Teléfono") },
+            isError = uiState.errores.telefono != null,
+            supportingText = {
+                uiState.errores.telefono?.let { mensaje -> Text(mensaje) }
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(
                 checked = uiState.aceptaTerminos,
                 onCheckedChange = viewModel::onAceptaTerminos
             )
-            Spacer( Modifier.width(8.dp))
-            Text("Acepto los terminos y condiciones")
+            Spacer(Modifier.width(8.dp))
+            Text("Acepto los términos y condiciones")
         }
 
-        //Boton Enviar
+
         Button(
             onClick = {
-                if (viewModel.validarUsuario()) {
+                viewModel.registrarse {
+
                     navController.navigate(AppScreen.LoginScreen.route)
                 }
             },
@@ -135,4 +201,3 @@ fun RegistroUsuarioScreen(
         }
     }
 }
-

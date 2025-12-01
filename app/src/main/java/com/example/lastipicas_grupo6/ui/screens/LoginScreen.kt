@@ -72,14 +72,15 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                scope.launch {
-                    if (viewModel.validarUsuario()) {
-                        navController.navigate(AppScreen.MenuScreen.route)
+                viewModel.login {
+
+                    navController.navigate(AppScreen.MenuScreen.route) {
+                        popUpTo(AppScreen.LoginScreen.route) { inclusive = true }
                     }
                 }
             },
-            modifier = Modifier.fillMaxWidth()
-
+            modifier = Modifier.fillMaxWidth(),
+            enabled = true
         ) {
             Text("Entrar")
         }

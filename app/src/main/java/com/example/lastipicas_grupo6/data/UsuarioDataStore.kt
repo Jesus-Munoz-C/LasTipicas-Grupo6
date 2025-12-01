@@ -17,6 +17,10 @@ class UsuarioDataStore(private val context: Context) {
     private val USUARIO_EMAIL = stringPreferencesKey("usuario_email")
     private val USUARIO_PASS = stringPreferencesKey("usuario_pass")
 
+    private val USER_PHOTO_URI = stringPreferencesKey("user_photo_uri")
+    private val USER_TOKEN = stringPreferencesKey("user_token")
+
+
     suspend fun guardarEstadoSesion(valor: Boolean) {
         context.dataStore.edit { preferencias ->
             preferencias[SESION_ACTIVA] = valor
@@ -43,4 +47,31 @@ class UsuarioDataStore(private val context: Context) {
             Pair(email, pass)
         }
     }
+
+    suspend fun guardarToken(token: String) {
+        context.dataStore.edit { preferencias ->
+            preferencias[USER_TOKEN] = token
+        }
+    }
+
+    val obtenerToken: Flow<String?> = context.dataStore.data.map { preferencias ->
+        preferencias[USER_TOKEN]
+    }
+
+    suspend fun vaciarDataStore() {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
+
+    suspend fun guardarFoto(uri: String) {
+        context.dataStore.edit { preferences ->
+            preferences[USER_PHOTO_URI] = uri
+        }
+    }
+
+    val obtenerFoto: Flow<String?> = context.dataStore.data.map { preferences ->
+        preferences[USER_PHOTO_URI]
+    }
 }
+
