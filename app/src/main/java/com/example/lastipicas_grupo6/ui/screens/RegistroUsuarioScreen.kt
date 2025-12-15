@@ -153,12 +153,6 @@ fun RegistroUsuarioScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        OutlinedTextField(
-            value = uiState.telefono,
-            onValueChange = viewModel::onTelefonoChange,
-            label = { Text("Teléfono") },
-            modifier = Modifier.fillMaxWidth()
-        )
 
         OutlinedTextField(
             value = uiState.telefono,

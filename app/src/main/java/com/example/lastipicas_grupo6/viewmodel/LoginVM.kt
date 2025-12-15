@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class LoginVM(application: Application) : AndroidViewModel(application) {
 
-    private val repository = AuthRepository() // CAMBIO: Usamos el repo de Auth
+    private val repository = AuthRepository()
     private val dataStore = UsuarioDataStore(getApplication())
 
     private val _uiState = MutableStateFlow(LoginUiState())
