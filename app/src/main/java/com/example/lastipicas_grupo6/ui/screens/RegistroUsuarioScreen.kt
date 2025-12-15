@@ -154,7 +154,7 @@ fun RegistroUsuarioScreen(
         )
 
 
-        OutlinedTextField(
+        OutlinedTextField( //ESTE SE QUEDA
             value = uiState.telefono,
             onValueChange = { input ->
                 if (input.all { it.isDigit() } && input.length <= 9) {
